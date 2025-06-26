@@ -1,0 +1,9 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <persistence-unit name="movie-service" transaction-type="RESOURCE_LOCAL">
+        <class>data.entity.Movie</class>
+        <class>data.entity.Room</class>
+        <class>data.entity.Showtime</class>
+        <class>data.entity.Ticket</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    </persistence-unit>
+</persistence>
