@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "showtimes")
@@ -32,6 +33,9 @@ public class Showtime {
     @ColumnDefault("0.00")
     @Column(name = "ticket_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal ticketPrice;
+
+    @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Ticket> tickets;
 
     public Integer getId() {
         return id;
@@ -73,4 +77,7 @@ public class Showtime {
         this.ticketPrice = ticketPrice;
     }
 
+    public List<Ticket> getTickets() { return tickets; }
+
+    public void setTickets(List<Ticket> tickets) { this.tickets = tickets; }
 }

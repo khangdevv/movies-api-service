@@ -2,6 +2,8 @@ package data.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "rooms")
 public class Room {
@@ -15,6 +17,9 @@ public class Room {
 
     @Column(name = "capacity", nullable = false)
     private Integer capacity;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Showtime> showtimes;
 
     public Integer getId() {
         return id;
@@ -40,4 +45,7 @@ public class Room {
         this.capacity = capacity;
     }
 
+    public List<Showtime> getShowtimes() { return showtimes; }
+
+    public void setShowtimes(List<Showtime> showtimes) { this.showtimes = showtimes; }
 }

@@ -2,6 +2,8 @@ package data.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "movies")
 public class Movie {
@@ -22,6 +24,9 @@ public class Movie {
     @Lob
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Showtime> showtimes;
 
     public Integer getId() {
         return id;
@@ -63,4 +68,7 @@ public class Movie {
         this.description = description;
     }
 
+    public List<Showtime> getShowtimes() { return showtimes; }
+
+    public void setShowtimes(List<Showtime> showtimes) { this.showtimes = showtimes; }
 }
