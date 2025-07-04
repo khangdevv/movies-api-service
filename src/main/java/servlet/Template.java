@@ -1,7 +1,9 @@
 package servlet;
 
 import data.repository.MovieRepository;
+import data.request.AddMovieRequest;
 import data.request.UpdateMovieRequest;
+import data.response.ErrorType;
 import data.response.MovieResponse;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -11,13 +13,11 @@ import util.HttpResponseUtil;
 import util.JsonUtil;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/movies")
-public class ProductServlet extends HttpServlet {
+public class Template extends HttpServlet {
     private MoviesService moviesService;
-
-    // private final ProductDAO dao = new ProductDAO();
-    // private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void init() throws ServletException {
@@ -30,26 +30,41 @@ public class ProductServlet extends HttpServlet {
         String id = req.getParameter("id");
 
         if (id != null) {
-            int id = Integer.parseInt(id);
-            Product product = dao.getById(id);
-            if (product != null) {
-                mapper.writeValue(resp.getOutputStream(), product);
+            int movieId = Integer.parseInt(id);
+            MovieResponse movieResponse = moviesService.getMovieById(movieId);
+            if (movieResponse != null) {
+                HttpResponseUtil.sendSuccess(
+                        resp,
+                        HttpServletResponse.SC_OK,
+                        "Movie retrieved successfully",
+                        movieResponse
+                );
             } else {
-                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                resp.getWriter().write("{\"error\"😕"Not found\"}");
+                HttpResponseUtil.sendError(
+                        resp,
+                        HttpServletResponse.SC_NOT_FOUND, ErrorType.INVALID_INPUT,
+                        "Movie not found"
+                );
             }
         } else {
-            List<Product> products = dao.getAll();
-            mapper.writeValue(resp.getOutputStream(), products);
+            List<MovieResponse> movieResponses = moviesService.getAllMovies();
+            String message = movieResponses.isEmpty()
+                    ? "There are no movies in the database"
+                    : "There are " + movieResponses.size() + " movies in the database";
+            HttpResponseUtil.sendSuccess(resp, HttpServletResponse.SC_OK, message, movieResponses);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Product p = mapper.readValue(req.getInputStream(), Product.class);
-        dao.create(p);
-        resp.setStatus(HttpServletResponse.SC_CREATED);
-        mapper.writeValue(resp.getOutputStream(), p);
+        AddMovieRequest addMovieRequest = JsonUtil.fromJson(req.getInputStream(), AddMovieRequest.class);
+        MovieResponse movieResponse = moviesService.addMovie(addMovieRequest);
+        HttpResponseUtil .sendSuccess(
+                resp,
+                HttpServletResponse.SC_CREATED,
+                "Movie added successfully",
+                movieResponse
+        );
     }
 
     @Override
@@ -59,20 +74,28 @@ public class ProductServlet extends HttpServlet {
         if (updatedMovie != null) {
             HttpResponseUtil.sendSuccess(resp, HttpServletResponse.SC_OK, "Movie updated successfully", updatedMovie);
         } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String idParam = req.getParameter("id");
-        if (idParam != null) {
-            int id = Integer.parseInt(idParam);
-            dao.delete(id);
-            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        String id = req.getParameter("id");
+        if (id != null) {
+            int movieId = Integer.parseInt(id);
+            MovieResponse movieResponse = moviesService.deleteMovie(movieId);
+            if (movieResponse != null) {
+                HttpResponseUtil.sendSuccess(
+                        resp,
+                        HttpServletResponse.SC_OK,
+                        "Movie deleted successfully",
+                        movieResponse
+                );
+            } else {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Movie not found");
+            }
         } else {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\"😕"Missing id\"}");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid endpoint");
         }
     }
 }

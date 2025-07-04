@@ -1,7 +1,6 @@
 package data.repository;
 
 import data.entity.Showtime;
-import data.entity.Showtime;
 import jakarta.persistence.*;
 import util.HibernateUtil;
 
@@ -81,6 +80,16 @@ public class ShowtimeRepository {
                 et.rollback();
             }
             throw new RuntimeException("Database error while updating Showtime", e);
+        }
+    }
+
+    public List<Showtime> getShowtimesByMovieId(int movieId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT s FROM Showtime s WHERE s.movie.id = :movieId", Showtime.class)
+                     .setParameter("movieId", movieId)
+                     .getResultList();
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failed to get Showtimes for movie with id " + movieId, e);
         }
     }
 }

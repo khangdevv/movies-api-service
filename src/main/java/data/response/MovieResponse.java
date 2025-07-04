@@ -10,7 +10,7 @@ public class MovieResponse {
     private String genre;
     private Integer durationMinutes;
     private String description;
-    private List<Showtime> showtimes;
+    private List<ShowtimeResponse> showtimes;
 
     public Integer getId() {
         return id;
@@ -52,11 +52,7 @@ public class MovieResponse {
         this.description = description;
     }
 
-    public List<Showtime> getShowtimes() {
-        return showtimes;
-    }
+    public List<ShowtimeResponse> getShowtimes() { return showtimes; }
 
-    public void setShowtimes(List<Showtime> showtimes) {
-        this.showtimes = showtimes;
-    }
+    public void setShowtimes(List<ShowtimeResponse> showtimes) { this.showtimes = showtimes; }
 }

@@ -1,11 +1,10 @@
 package data.mapper;
 
 import data.entity.Movie;
-import data.entity.Showtime;
-import data.repository.ShowtimeRepository;
 import data.request.AddMovieRequest;
 import data.request.UpdateMovieRequest;
 import data.response.MovieResponse;
+import data.response.ShowtimeResponse;
 
 import java.util.List;
 
@@ -17,10 +16,21 @@ public class MovieMapper {
         movieResponse.setDescription(movie.getDescription());
         movieResponse.setDurationMinutes(movie.getDurationMinutes());
         movieResponse.setGenre(movie.getGenre());
-        ShowtimeRepository showtimeRepository = new ShowtimeRepository();
-        List<Showtime> showtimes = showtimeRepository.getShowtimesByMovieId(movie.getId());
-        if (showtimes != null && !showtimes.isEmpty()) {
-            movieResponse.setShowtimes(showtimes);
+        if (movie.getShowtimes() != null) {
+            List<ShowtimeResponse> showtimes = movie.getShowtimes().stream().map(showtime -> {
+                ShowtimeResponse showtimeResponse = new ShowtimeResponse();
+                showtimeResponse.setId(showtime.getId());
+                showtimeResponse.setStartTime(showtime.getStartTime());
+                showtimeResponse.setTicketPrice(showtime.getTicketPrice());
+                showtimeResponse.setMovieName(showtime.getMovie().getTitle());
+                showtimeResponse.setMovieId(showtime.getMovie().getId());
+                showtimeResponse.setRoomId(showtime.getRoom().getId());
+                showtimeResponse.setRoomName(showtime.getRoom().getRoomName());
+                return showtimeResponse;
+            }).toList();
+            if (!showtimes.isEmpty()) {
+                movieResponse.setShowtimes(showtimes);
+            }
         }
         return movieResponse;
     }
