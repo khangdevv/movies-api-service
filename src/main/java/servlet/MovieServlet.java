@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/movies")
-public class Template extends HttpServlet {
+public class MovieServlet extends HttpServlet {
+
     private MoviesService moviesService;
 
     @Override

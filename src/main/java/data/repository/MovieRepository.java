@@ -82,14 +82,4 @@ public class MovieRepository {
             throw new RuntimeException("Database error while updating movie", e);
         }
     }
-
-    public List<Movie> searchByGenre(String genre) {
-        try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT m FROM Movie m WHERE m.genre = : genre", Movie.class)
-                     .setParameter("genre", genre)
-                     .getResultList();
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Failed to search movies by genre", e);
-        }
-    }
 }

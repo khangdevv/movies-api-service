@@ -17,20 +17,8 @@ public class MovieMapper {
         movieResponse.setDurationMinutes(movie.getDurationMinutes());
         movieResponse.setGenre(movie.getGenre());
         if (movie.getShowtimes() != null) {
-            List<ShowtimeResponse> showtimes = movie.getShowtimes().stream().map(showtime -> {
-                ShowtimeResponse showtimeResponse = new ShowtimeResponse();
-                showtimeResponse.setId(showtime.getId());
-                showtimeResponse.setStartTime(showtime.getStartTime());
-                showtimeResponse.setTicketPrice(showtime.getTicketPrice());
-                showtimeResponse.setMovieName(showtime.getMovie().getTitle());
-                showtimeResponse.setMovieId(showtime.getMovie().getId());
-                showtimeResponse.setRoomId(showtime.getRoom().getId());
-                showtimeResponse.setRoomName(showtime.getRoom().getRoomName());
-                return showtimeResponse;
-            }).toList();
-            if (!showtimes.isEmpty()) {
-                movieResponse.setShowtimes(showtimes);
-            }
+            List<ShowtimeResponse> showtimes = ShowtimeMapper.toShowtimeResponses(movie.getShowtimes());
+            movieResponse.setShowtimes(showtimes);
         }
         return movieResponse;
     }

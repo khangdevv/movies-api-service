@@ -1,9 +1,10 @@
 package data.mapper;
 
 import data.entity.Showtime;
-import data.request.AddShowtimeRequest;
-import data.request.UpdateShowtimeRequest;
 import data.response.ShowtimeResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowtimeMapper {
     public static ShowtimeResponse toShowtimeResponse(Showtime showtime) {
@@ -22,18 +23,11 @@ public class ShowtimeMapper {
         return response;
     }
 
-    public static Showtime toShowtime(AddShowtimeRequest request) {
-        Showtime showtime = new Showtime();
-        showtime.setTicketPrice(request.getTicketPrice());
-        showtime.setStartTime(request.getStartTime());
-        return showtime;
-    }
-
-    public static Showtime toShowtime(UpdateShowtimeRequest request) {
-        Showtime showtime = new Showtime();
-        showtime.setId(request.getId());
-        showtime.setTicketPrice(request.getTicketPrice());
-        showtime.setStartTime(request.getStartTime());
-        return showtime;
+    public static List<ShowtimeResponse> toShowtimeResponses(List<Showtime> showtimes) {
+        List<ShowtimeResponse> responses = new ArrayList<>();
+        for (Showtime showtime : showtimes) {
+            responses.add(toShowtimeResponse(showtime));
+        }
+        return responses;
     }
 }
