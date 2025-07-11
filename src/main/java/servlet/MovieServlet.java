@@ -5,7 +5,6 @@ import data.request.AddMovieRequest;
 import data.request.UpdateMovieRequest;
 import data.response.ErrorType;
 import data.response.MovieResponse;
-import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import service.MoviesService;
@@ -21,7 +20,7 @@ public class MovieServlet extends HttpServlet {
     private MoviesService moviesService;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         moviesService = new MoviesService(new MovieRepository());
     }
 

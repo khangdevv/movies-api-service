@@ -1,9 +1,13 @@
 package data.response;
 
 import data.entity.Showtime;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class MovieResponse {
     private Integer id;
     private String title;
@@ -11,48 +15,4 @@ public class MovieResponse {
     private Integer durationMinutes;
     private String description;
     private List<ShowtimeResponse> showtimes;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public Integer getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public void setDurationMinutes(Integer durationMinutes) {
-        this.durationMinutes = durationMinutes;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<ShowtimeResponse> getShowtimes() { return showtimes; }
-
-    public void setShowtimes(List<ShowtimeResponse> showtimes) { this.showtimes = showtimes; }
 }
